@@ -5,22 +5,31 @@ const participantsList = document.getElementById('participantsList');
 const drawButton = document.getElementById('drawButton');
 const clearButton = document.getElementById('clearButton');
 const winnerDisplay = document.getElementById('winner');
+const winnersHistory = document.getElementById('winnersHistory');
 
-// Liste des participants (chaque participant est un objet {name, phone})
+// Liste des participants
 let participants = [];
+// Liste des gagnants
+let winners = [];
 
-// Charger les participants depuis le Local Storage au chargement de la page
+// Charger les données depuis le Local Storage au chargement de la page
 window.onload = () => {
     const storedParticipants = localStorage.getItem('participants');
+    const storedWinners = localStorage.getItem('winners');
+
     if (storedParticipants) {
         participants = JSON.parse(storedParticipants);
         updateParticipantsList();
     }
+    if (storedWinners) {
+        winners = JSON.parse(storedWinners);
+        updateWinnersHistory();
+    }
 };
 
-// Mettre à jour la liste des participants dans l'interface
+// Mettre à jour la liste des participants
 function updateParticipantsList() {
-    participantsList.innerHTML = ''; // Vide la liste actuelle
+    participantsList.innerHTML = '';
     participants.forEach(({ name, phone }) => {
         const li = document.createElement('li');
         li.innerHTML = `
@@ -36,16 +45,31 @@ function saveParticipants() {
     localStorage.setItem('participants', JSON.stringify(participants));
 }
 
+// Mettre à jour l'historique des gagnants
+function updateWinnersHistory() {
+    winnersHistory.innerHTML = '';
+    winners.forEach((winner, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>Jour ${index + 1} :</strong> ${winner.name} (${winner.phone})`;
+        winnersHistory.appendChild(li);
+    });
+}
+
+// Sauvegarder les gagnants dans le Local Storage
+function saveWinners() {
+    localStorage.setItem('winners', JSON.stringify(winners));
+}
+
 // Ajouter un participant
 addButton.addEventListener('click', () => {
     const name = nameInput.value.trim();
     const phone = phoneInput.value.trim();
     if (name && phone) {
-        participants.push({ name, phone }); // Ajouter un objet {name, phone}
-        saveParticipants(); // Sauvegarder dans Local Storage
-        updateParticipantsList(); // Mettre à jour l'affichage
-        nameInput.value = ''; // Réinitialiser le champ de nom
-        phoneInput.value = ''; // Réinitialiser le champ de téléphone
+        participants.push({ name, phone });
+        saveParticipants();
+        updateParticipantsList();
+        nameInput.value = '';
+        phoneInput.value = '';
     } else {
         alert("Veuillez entrer un nom et un numéro de téléphone !");
     }
@@ -55,6 +79,9 @@ addButton.addEventListener('click', () => {
 drawButton.addEventListener('click', () => {
     if (participants.length > 0) {
         const winner = participants[Math.floor(Math.random() * participants.length)];
+        winners.push(winner); // Ajouter le gagnant à l'historique
+        saveWinners(); // Sauvegarder l'historique dans le Local Storage
+        updateWinnersHistory(); // Mettre à jour l'affichage
         winnerDisplay.textContent = `Le gagnant est : ${winner.name} (${winner.phone})`;
     } else {
         alert("Aucun participant !");
@@ -64,9 +91,9 @@ drawButton.addEventListener('click', () => {
 // Supprimer tous les participants
 clearButton.addEventListener('click', () => {
     if (confirm("Voulez-vous vraiment supprimer tous les participants ?")) {
-        participants = []; // Réinitialiser la liste
-        saveParticipants(); // Mettre à jour le Local Storage
-        updateParticipantsList(); // Mettre à jour l'affichage
-        winnerDisplay.textContent = ''; // Effacer le gagnant affiché
+        participants = [];
+        saveParticipants();
+        updateParticipantsList();
+        winnerDisplay.textContent = '';
     }
 });
