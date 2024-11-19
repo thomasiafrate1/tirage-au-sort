@@ -1,11 +1,12 @@
 const nameInput = document.getElementById('nameInput');
+const phoneInput = document.getElementById('phoneInput');
 const addButton = document.getElementById('addButton');
 const participantsList = document.getElementById('participantsList');
 const drawButton = document.getElementById('drawButton');
 const clearButton = document.getElementById('clearButton');
 const winnerDisplay = document.getElementById('winner');
 
-// Liste des participants (chargée depuis le Local Storage au départ)
+// Liste des participants (chaque participant est un objet {name, phone})
 let participants = [];
 
 // Charger les participants depuis le Local Storage au chargement de la page
@@ -17,17 +18,17 @@ window.onload = () => {
     }
 };
 
-// Fonction pour mettre à jour la liste des participants dans l'interface
+// Mettre à jour la liste des participants dans l'interface
 function updateParticipantsList() {
-    participantsList.innerHTML = ''; // Vide la liste affichée
-    participants.forEach((name, index) => {
+    participantsList.innerHTML = ''; // Vide la liste actuelle
+    participants.forEach(({ name, phone }, index) => {
         const li = document.createElement('li');
-        li.textContent = name;
+        li.textContent = `${name} - ${phone}`; // Affiche le nom et le numéro
         participantsList.appendChild(li);
     });
 }
 
-// Fonction pour sauvegarder la liste des participants dans le Local Storage
+// Sauvegarder les participants dans le Local Storage
 function saveParticipants() {
     localStorage.setItem('participants', JSON.stringify(participants));
 }
@@ -35,13 +36,15 @@ function saveParticipants() {
 // Ajouter un participant
 addButton.addEventListener('click', () => {
     const name = nameInput.value.trim();
-    if (name) {
-        participants.push(name); // Ajouter le nom à la liste
+    const phone = phoneInput.value.trim();
+    if (name && phone) {
+        participants.push({ name, phone }); // Ajouter un objet {name, phone}
         saveParticipants(); // Sauvegarder dans Local Storage
         updateParticipantsList(); // Mettre à jour l'affichage
-        nameInput.value = ''; // Réinitialiser le champ
+        nameInput.value = ''; // Réinitialiser le champ de nom
+        phoneInput.value = ''; // Réinitialiser le champ de téléphone
     } else {
-        alert("Veuillez entrer un nom !");
+        alert("Veuillez entrer un nom et un numéro de téléphone !");
     }
 });
 
@@ -49,7 +52,7 @@ addButton.addEventListener('click', () => {
 drawButton.addEventListener('click', () => {
     if (participants.length > 0) {
         const winner = participants[Math.floor(Math.random() * participants.length)];
-        winnerDisplay.textContent = `Le gagnant est : ${winner}`;
+        winnerDisplay.textContent = `Le gagnant est : ${winner.name} (${winner.phone})`;
     } else {
         alert("Aucun participant !");
     }
@@ -64,9 +67,3 @@ clearButton.addEventListener('click', () => {
         winnerDisplay.textContent = ''; // Effacer le gagnant affiché
     }
 });
-
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js')
-        .then(() => console.log('Service Worker enregistré'))
-        .catch(err => console.error('Erreur lors de l\'enregistrement du Service Worker', err));
-}
