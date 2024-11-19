@@ -5,7 +5,7 @@ const drawButton = document.getElementById('drawButton');
 const clearButton = document.getElementById('clearButton');
 const winnerDisplay = document.getElementById('winner');
 
-// Liste des participants
+// Liste des participants (chargée depuis le Local Storage au départ)
 let participants = [];
 
 // Charger les participants depuis le Local Storage au chargement de la page
@@ -17,22 +17,27 @@ window.onload = () => {
     }
 };
 
-// Mettre à jour la liste des participants dans l'interface
+// Fonction pour mettre à jour la liste des participants dans l'interface
 function updateParticipantsList() {
-    participantsList.innerHTML = ''; // Vide la liste actuelle
-    participants.forEach(name => {
+    participantsList.innerHTML = ''; // Vide la liste affichée
+    participants.forEach((name, index) => {
         const li = document.createElement('li');
         li.textContent = name;
         participantsList.appendChild(li);
     });
 }
 
+// Fonction pour sauvegarder la liste des participants dans le Local Storage
+function saveParticipants() {
+    localStorage.setItem('participants', JSON.stringify(participants));
+}
+
 // Ajouter un participant
 addButton.addEventListener('click', () => {
     const name = nameInput.value.trim();
     if (name) {
-        participants.push(name); // Ajouter à la liste
-        localStorage.setItem('participants', JSON.stringify(participants)); // Sauvegarder dans Local Storage
+        participants.push(name); // Ajouter le nom à la liste
+        saveParticipants(); // Sauvegarder dans Local Storage
         updateParticipantsList(); // Mettre à jour l'affichage
         nameInput.value = ''; // Réinitialiser le champ
     } else {
@@ -53,8 +58,8 @@ drawButton.addEventListener('click', () => {
 // Supprimer tous les participants
 clearButton.addEventListener('click', () => {
     if (confirm("Voulez-vous vraiment supprimer tous les participants ?")) {
-        participants = []; // Vider la liste
-        localStorage.removeItem('participants'); // Supprimer du Local Storage
+        participants = []; // Réinitialiser la liste
+        saveParticipants(); // Mettre à jour le Local Storage
         updateParticipantsList(); // Mettre à jour l'affichage
         winnerDisplay.textContent = ''; // Effacer le gagnant affiché
     }
