@@ -21,9 +21,12 @@ window.onload = () => {
 // Mettre à jour la liste des participants dans l'interface
 function updateParticipantsList() {
     participantsList.innerHTML = ''; // Vide la liste actuelle
-    participants.forEach(({ name, phone }, index) => {
+    participants.forEach(({ name, phone }) => {
         const li = document.createElement('li');
-        li.textContent = `${name} - ${phone}`; // Affiche le nom et le numéro
+        li.innerHTML = `
+            <span>${name}</span>
+            <span style="color: gray; font-size: 0.9em; margin-left: 10px;">(${phone})</span>
+        `;
         participantsList.appendChild(li);
     });
 }
