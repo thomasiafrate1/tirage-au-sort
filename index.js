@@ -1,99 +1,67 @@
-const nameInput = document.getElementById('nameInput');
-const phoneInput = document.getElementById('phoneInput');
-const addButton = document.getElementById('addButton');
-const participantsList = document.getElementById('participantsList');
-const drawButton = document.getElementById('drawButton');
-const clearButton = document.getElementById('clearButton');
-const winnerDisplay = document.getElementById('winner');
-const winnersHistory = document.getElementById('winnersHistory');
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+import { getDatabase, ref, set, push, onValue } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js";
 
-// Liste des participants
-let participants = [];
-// Liste des gagnants
-let winners = [];
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-// Charger les données depuis le Local Storage au chargement de la page
-window.onload = () => {
-    const storedParticipants = localStorage.getItem('participants');
-    const storedWinners = localStorage.getItem('winners');
-
-    if (storedParticipants) {
-        participants = JSON.parse(storedParticipants);
-        updateParticipantsList();
-    }
-    if (storedWinners) {
-        winners = JSON.parse(storedWinners);
-        updateWinnersHistory();
-    }
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCiH8CXgSbue5EfURoB-f87aNVJhJFGd1s",
+  authDomain: "tirageausort-afc8d.firebaseapp.com",
+  projectId: "tirageausort-afc8d",
+  storageBucket: "tirageausort-afc8d.firebasestorage.app",
+  messagingSenderId: "30882873608",
+  appId: "1:30882873608:web:49f71a421f889c98076cbd",
+  measurementId: "G-JDMF6903YE"
 };
 
-// Mettre à jour la liste des participants
-function updateParticipantsList() {
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+// Ajouter un participant
+async function addParticipant(name, phone) {
+    const newParticipantRef = push(ref(db, 'participants'));
+    await set(newParticipantRef, { name, phone });
+    console.log("Participant ajouté !");
+}
+
+// Charger les participants
+function loadParticipants() {
+    onValue(ref(db, 'participants'), (snapshot) => {
+        const data = snapshot.val();
+        const participants = Object.values(data || {});
+        updateParticipantsList(participants);
+    });
+}
+
+// Mettre à jour l'affichage des participants
+function updateParticipantsList(participants) {
+    const participantsList = document.getElementById('participantsList');
     participantsList.innerHTML = '';
     participants.forEach(({ name, phone }) => {
         const li = document.createElement('li');
-        li.innerHTML = `
-            <span>${name}</span>
-            <span style="color: gray; font-size: 0.9em; margin-left: 10px;">(${phone})</span>
-        `;
+        li.textContent = `${name} - ${phone}`;
         participantsList.appendChild(li);
     });
 }
 
-// Sauvegarder les participants dans le Local Storage
-function saveParticipants() {
-    localStorage.setItem('participants', JSON.stringify(participants));
-}
-
-// Mettre à jour l'historique des gagnants
-function updateWinnersHistory() {
-    winnersHistory.innerHTML = '';
-    winners.forEach((winner, index) => {
-        const li = document.createElement('li');
-        li.innerHTML = `<strong>Jour ${index + 1} :</strong> ${winner.name} (${winner.phone})`;
-        winnersHistory.appendChild(li);
-    });
-}
-
-// Sauvegarder les gagnants dans le Local Storage
-function saveWinners() {
-    localStorage.setItem('winners', JSON.stringify(winners));
-}
-
-// Ajouter un participant
-addButton.addEventListener('click', () => {
-    const name = nameInput.value.trim();
-    const phone = phoneInput.value.trim();
+// Gestion des événements
+document.getElementById('addButton').addEventListener('click', () => {
+    const name = document.getElementById('nameInput').value.trim();
+    const phone = document.getElementById('phoneInput').value.trim();
     if (name && phone) {
-        participants.push({ name, phone });
-        saveParticipants();
-        updateParticipantsList();
-        nameInput.value = '';
-        phoneInput.value = '';
+        addParticipant(name, phone);
+        document.getElementById('nameInput').value = '';
+        document.getElementById('phoneInput').value = '';
     } else {
-        alert("Veuillez entrer un nom et un numéro de téléphone !");
+        alert("Veuillez entrer un nom et un numéro !");
     }
 });
 
-// Effectuer un tirage au sort
-drawButton.addEventListener('click', () => {
-    if (participants.length > 0) {
-        const winner = participants[Math.floor(Math.random() * participants.length)];
-        winners.push(winner); // Ajouter le gagnant à l'historique
-        saveWinners(); // Sauvegarder l'historique dans le Local Storage
-        updateWinnersHistory(); // Mettre à jour l'affichage
-        winnerDisplay.textContent = `Le gagnant est : ${winner.name} (${winner.phone})`;
-    } else {
-        alert("Aucun participant !");
-    }
-});
-
-// Supprimer tous les participants
-clearButton.addEventListener('click', () => {
-    if (confirm("Voulez-vous vraiment supprimer tous les participants ?")) {
-        participants = [];
-        saveParticipants();
-        updateParticipantsList();
-        winnerDisplay.textContent = '';
-    }
-});
+// Charger les données au démarrage
+loadParticipants();

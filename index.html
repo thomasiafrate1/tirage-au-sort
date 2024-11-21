@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tirage au Sort</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>Tirage au Sort</h1>
+        <div id="winnersHistory">
+            <h2>Historique des gagnants</h2>
+            <ul id="winnersList"></ul>
+        </div>
         <input type="text" id="nameInput" placeholder="Entrez un nom">
         <input type="tel" id="phoneInput" placeholder="Entrez un numéro de téléphone">
         <button id="addButton">Ajouter</button>
@@ -16,11 +20,7 @@
         <button id="drawButton">Tirage au sort</button>
         <button id="clearButton">Supprimer tous les participants</button>
         <p id="winner"></p>
-        
-        <h2>Historique des Gagnants</h2>
-        <ul id="winnersHistory"></ul>
+        <script type="module" src="script.js"></script>
     </div>
-    
-    <script src="index.js"></script>
 </body>
 </html>
