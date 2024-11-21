@@ -9,18 +9,32 @@
 <body>
     <div class="container">
         <h1>Tirage au Sort</h1>
-        <div id="winnersHistory">
-            <h2>Historique des gagnants</h2>
-            <ul id="winnersList"></ul>
-        </div>
+        
+        <!-- Formulaire pour ajouter des participants -->
         <input type="text" id="nameInput" placeholder="Entrez un nom">
         <input type="tel" id="phoneInput" placeholder="Entrez un numéro de téléphone">
         <button id="addButton">Ajouter</button>
+        
+        <!-- Liste des participants -->
         <ul id="participantsList"></ul>
-        <button id="drawButton">Tirage au sort</button>
-        <button id="clearButton">Supprimer tous les participants</button>
+    
+        <!-- Boutons pour le tirage et la suppression -->
+        <div class="buttons">
+            <button id="drawButton">Tirage au sort</button>
+            <button id="clearButton">Supprimer tous les participants</button>
+        </div>
+    
+        <!-- Affichage du gagnant -->
         <p id="winner"></p>
-        <script type="module" src="index.js"></script>
+    
+        <!-- Menu déroulant pour l'historique des gagnants -->
+        <div class="dropdown">
+            <button id="toggleWinners" class="dropdown-button">Afficher l'historique des gagnants</button>
+            <ul id="winnersList" class="dropdown-content"></ul>
+        </div>
     </div>
+    
+    <!-- Fichier JavaScript -->
+    <script type="module" src="index.js"></script>
 </body>
 </html>
