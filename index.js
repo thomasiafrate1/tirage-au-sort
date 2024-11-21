@@ -2,11 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
 import { getDatabase, ref, set, push, onValue } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCiH8CXgSbue5EfURoB-f87aNVJhJFGd1s",
   authDomain: "tirageausort-afc8d.firebaseapp.com",
@@ -20,50 +16,54 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getDatabase(app);
+const db = getDatabase(app);
+
+let participants = []; // Liste des participants
+let winners = []; // Liste des gagnants
 
 // Ajouter un participant
 async function addParticipant(name, phone) {
-    console.log("Ajout d'un participant :", name, phone); // Log pour vérifier l'entrée
+    console.log("Ajout d'un participant :", name, phone);
     const newParticipantRef = push(ref(db, 'participants'));
     await set(newParticipantRef, { name, phone })
         .then(() => console.log("Participant ajouté à Firebase"))
         .catch((error) => console.error("Erreur lors de l'ajout :", error));
 }
 
-
 // Charger les participants
 function loadParticipants() {
     onValue(ref(db, 'participants'), (snapshot) => {
         const data = snapshot.val();
-        console.log("Données récupérées depuis Firebase :", data); // Log pour vérifier la réponse
-        const participants = Object.values(data || {});
+        participants = Object.values(data || {}); // Mise à jour de la variable globale
+        console.log("Participants chargés :", participants);
         updateParticipantsList(participants);
     }, (error) => {
         console.error("Erreur lors du chargement des participants :", error);
     });
 }
 
+// Ajouter un gagnant
 async function addWinner(day, name, phone) {
-    console.log("Ajout du gagnant :", day, name, phone); // Log pour confirmer
+    console.log("Ajout du gagnant :", day, name, phone);
     const newWinnerRef = push(ref(db, 'winners'));
     await set(newWinnerRef, { day, name, phone })
         .then(() => console.log("Gagnant ajouté à Firebase"))
         .catch((error) => console.error("Erreur lors de l'ajout du gagnant :", error));
 }
 
+// Charger les gagnants
 function loadWinners() {
     onValue(ref(db, 'winners'), (snapshot) => {
         const data = snapshot.val();
-        console.log("Gagnants récupérés :", data); // Log pour vérifier
-        const winners = Object.entries(data || {}).map(([key, value]) => value);
+        winners = Object.entries(data || {}).map(([key, value]) => value); // Mise à jour de la variable globale
+        console.log("Gagnants chargés :", winners);
         updateWinnersList(winners);
     }, (error) => {
         console.error("Erreur lors du chargement des gagnants :", error);
     });
 }
 
-// Mettre à jour l'affichage des participants
+// Mise à jour de l'affichage des participants
 function updateParticipantsList(participants) {
     const participantsList = document.getElementById('participantsList');
     participantsList.innerHTML = '';
@@ -74,7 +74,31 @@ function updateParticipantsList(participants) {
     });
 }
 
-// Gestion des événements
+// Mise à jour de l'affichage des gagnants
+function updateWinnersList(winners) {
+    const winnersList = document.getElementById('winnersList');
+    winnersList.innerHTML = '';
+    winners.forEach((winner, index) => {
+        const li = document.createElement('li');
+        li.textContent = `Jour ${index + 1} : ${winner.name} (${winner.phone})`;
+        winnersList.appendChild(li);
+    });
+}
+
+// Bouton Tirage au sort
+document.getElementById('drawButton').addEventListener('click', () => {
+    console.log("Bouton Tirage au sort cliqué !");
+    if (participants.length > 0) {
+        const winner = participants[Math.floor(Math.random() * participants.length)];
+        console.log("Gagnant sélectionné :", winner);
+        addWinner(winners.length + 1, winner.name, winner.phone);
+        document.getElementById('winner').textContent = `Le gagnant est : ${winner.name} (${winner.phone})`;
+    } else {
+        alert("Aucun participant !");
+    }
+});
+
+// Bouton Ajouter un participant
 document.getElementById('addButton').addEventListener('click', () => {
     const name = document.getElementById('nameInput').value.trim();
     const phone = document.getElementById('phoneInput').value.trim();
@@ -89,3 +113,4 @@ document.getElementById('addButton').addEventListener('click', () => {
 
 // Charger les données au démarrage
 loadParticipants();
+loadWinners();
