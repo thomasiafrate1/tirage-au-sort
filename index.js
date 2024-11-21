@@ -12,6 +12,7 @@ import { getDatabase, ref, set, push, onValue } from "https://www.gstatic.com/fi
 const firebaseConfig = {
   apiKey: "AIzaSyCiH8CXgSbue5EfURoB-f87aNVJhJFGd1s",
   authDomain: "tirageausort-afc8d.firebaseapp.com",
+  databaseURL: "https://tirageausort-afc8d-default-rtdb.europe-west1.firebasedatabase.app/",
   projectId: "tirageausort-afc8d",
   storageBucket: "tirageausort-afc8d.firebasestorage.app",
   messagingSenderId: "30882873608",
