@@ -26,17 +26,42 @@ const analytics = getAnalytics(app);
 
 // Ajouter un participant
 async function addParticipant(name, phone) {
+    console.log("Ajout d'un participant :", name, phone); // Log pour vérifier l'entrée
     const newParticipantRef = push(ref(db, 'participants'));
-    await set(newParticipantRef, { name, phone });
-    console.log("Participant ajouté !");
+    await set(newParticipantRef, { name, phone })
+        .then(() => console.log("Participant ajouté à Firebase"))
+        .catch((error) => console.error("Erreur lors de l'ajout :", error));
 }
+
 
 // Charger les participants
 function loadParticipants() {
     onValue(ref(db, 'participants'), (snapshot) => {
         const data = snapshot.val();
+        console.log("Données récupérées depuis Firebase :", data); // Log pour vérifier la réponse
         const participants = Object.values(data || {});
         updateParticipantsList(participants);
+    }, (error) => {
+        console.error("Erreur lors du chargement des participants :", error);
+    });
+}
+
+async function addWinner(day, name, phone) {
+    console.log("Ajout du gagnant :", day, name, phone); // Log pour confirmer
+    const newWinnerRef = push(ref(db, 'winners'));
+    await set(newWinnerRef, { day, name, phone })
+        .then(() => console.log("Gagnant ajouté à Firebase"))
+        .catch((error) => console.error("Erreur lors de l'ajout du gagnant :", error));
+}
+
+function loadWinners() {
+    onValue(ref(db, 'winners'), (snapshot) => {
+        const data = snapshot.val();
+        console.log("Gagnants récupérés :", data); // Log pour vérifier
+        const winners = Object.entries(data || {}).map(([key, value]) => value);
+        updateWinnersList(winners);
+    }, (error) => {
+        console.error("Erreur lors du chargement des gagnants :", error);
     });
 }
 
