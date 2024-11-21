@@ -79,7 +79,7 @@ function updateParticipantsList(participants) {
     participantsList.innerHTML = '';
     participants.forEach(({ name, phone }) => {
         const li = document.createElement('li');
-        li.textContent = `${name} - ${phone}`;
+        li.textContent = `${name}`;
         participantsList.appendChild(li);
     });
 }
@@ -118,7 +118,6 @@ function updateWinnersList(winners) {
 }
 
 
-// Bouton Tirage au sort
 document.getElementById('drawButton').addEventListener('click', async () => {
     console.log("Bouton Tirage au sort cliqué !");
     if (participants.length > 0) {
@@ -132,12 +131,12 @@ document.getElementById('drawButton').addEventListener('click', async () => {
         // Ajouter le gagnant avec le lot à Firebase
         await addWinner(day, winner.name, winner.phone, currentLot);
 
-        // Afficher le gagnant et son lot
-        document.getElementById('winner').textContent = `Le gagnant est : ${winner.name} (${winner.phone})`;
-        document.getElementById('lot').textContent = `Lot gagné : ${currentLot}`;
-
         // Supprimer les participants après le tirage
         await clearParticipants();
+
+        // Afficher le gagnant et son lot
+        document.getElementById('winner').textContent = `Le gagnant est : ${winner.name}`;
+        document.getElementById('lot').textContent = `Lot gagné : ${currentLot}`;
     } else {
         alert("Aucun participant !");
     }
