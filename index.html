@@ -22,11 +22,15 @@
         <!-- Liste des participants -->
         <ul id="participantsList"></ul>
     
-        <!-- Boutons pour le tirage et la suppression -->
-        <div class="buttons">
-            <button id="drawButton">Tirage au sort</button>
-            <button id="clearButton">Supprimer tous les participants</button>
+        <!-- Bouton pour ouvrir le menu -->
+        <button id="menuButton" class="menu-button">☰</button>
+
+        <!-- Conteneur pour le menu déroulant -->
+        <div id="menuDropdown" class="menu-dropdown">
+            <button id="drawButton" class="menu-item">Tirage au sort</button>
+            <button id="toggleWinners" class="menu-item">Afficher l'historique</button>
         </div>
+
     
         <!-- Affichage du gagnant -->
         <p id="winner"></p>
@@ -34,7 +38,6 @@
     
         <!-- Menu déroulant pour l'historique des gagnants -->
         <div class="dropdown">
-            <button id="toggleWinners" class="dropdown-button">Afficher l'historique des gagnants</button>
             <ul id="winnersList" class="dropdown-content"></ul>
         </div>
     </div>

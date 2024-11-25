@@ -1,6 +1,14 @@
+@font-face {
+    font-family: 'Christmas'; /* Nom que vous utilisez dans CSS */
+    src: url('CHRISTMAS\ COMEBACK.otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 /* Style général */
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Christmas', sans-serif;
     background: url("fond.jpg");
     background-size: cover;
     color: #333;
@@ -66,6 +74,60 @@ body {
     background-color: #f1f1f1;
 }
 
+/* Style du bouton du menu */
+.menu-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 1000;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.menu-button:hover {
+    background-color: #45a049;
+}
+
+/* Conteneur du menu déroulant */
+.menu-dropdown {
+    display: none; /* Caché par défaut */
+    position: absolute;
+    top: 50px;
+    left: 10px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 1000;
+}
+
+/* Style des éléments du menu */
+.menu-item {
+    display: block;
+    width: 100%;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    text-align: left;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.menu-item:hover {
+    background-color: #45a049;
+}
+
 
 /* Conteneur principal */
 .container {
@@ -73,7 +135,7 @@ body {
     max-width: 600px;
     margin: auto;
     background: #ffffff;
-    border-radius: 10px;
+    border-radius: 0px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px 30px;
     text-align: center;

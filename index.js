@@ -157,6 +157,18 @@ document.getElementById('addButton').addEventListener('click', () => {
     }
 });
 
+// Gestion du menu déroulant
+document.getElementById('menuButton').addEventListener('click', () => {
+    const menuDropdown = document.getElementById('menuDropdown');
+    // Bascule entre visible et caché
+    if (menuDropdown.style.display === 'block') {
+        menuDropdown.style.display = 'none';
+    } else {
+        menuDropdown.style.display = 'block';
+    }
+});
+
+
 async function clearParticipants() {
     console.log("Suppression de tous les participants...");
     await set(ref(db, 'participants'), null) // Remplace la liste des participants par `null`
