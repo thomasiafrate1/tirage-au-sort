@@ -8,7 +8,7 @@
 
 /* Style général */
 body {
-    font-family: 'Christmas', sans-serif;
+    font-family: 'Christmas';
     background: url("fond.jpg");
     background-size: cover;
     color: #333;
@@ -24,6 +24,7 @@ body {
 /* Style du menu déroulant */
 .dropdown {
     margin-top: 20px;
+    font-family: 'Arial';
 }
 
 .dropdown-button {
@@ -147,6 +148,10 @@ h2 {
     color: #4caf50;
 }
 
+#participantsList{
+    font-family: 'Arial';
+}
+
 #winnersHistory {
     list-style: none;
     padding: 0;
@@ -170,6 +175,7 @@ h2 {
 
 /* Titre */
 h1 {
+    font-family: 'Christmas';
     font-size: 2rem;
     margin-bottom: 20px;
     color: #333;
@@ -177,6 +183,7 @@ h1 {
 
 /* Champ input */
 input {
+    font-family: 'Arial';
     width: calc(100% - 20px);
     padding: 10px;
     margin-bottom: 10px;
@@ -193,6 +200,7 @@ input:focus {
 
 /* Boutons */
 button {
+    font-family: 'Christmas';
     background: #00bcd4;
     color: white;
     border: none;
@@ -240,10 +248,17 @@ li {
 
 /* Gagnant */
 #winner {
+    font-family: 'Arial';
     margin-top: 20px;
     font-size: 1.2rem;
     font-weight: bold;
     color: #4caf50;
+}
+#lot {
+    font-family: 'Arial';
+    
+    font-size: 1rem;
+    
 }
 
 /* Pour les petits écrans */

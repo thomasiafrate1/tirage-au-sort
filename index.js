@@ -136,7 +136,7 @@ document.getElementById('drawButton').addEventListener('click', async () => {
 
         // Afficher le gagnant et son lot
         document.getElementById('winner').textContent = `Le gagnant est : ${winner.name}`;
-        document.getElementById('lot').textContent = `Lot gagné : ${currentLot}`;
+        document.getElementById('lot').textContent = `Lot gagne : ${currentLot}`;
     } else {
         alert("Aucun participant !");
     }
